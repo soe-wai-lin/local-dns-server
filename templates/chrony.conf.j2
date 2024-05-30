@@ -1,0 +1,14 @@
+# Use local NTP servers or public NTP servers
+server 192.168.124.200 iburst
+
+# Allow NTP client access from local network
+# allow 192.168.0.0/16
+
+# Enable NTP authentication
+# keyfile /etc/chrony.keys
+# commandkey 1
+# generatecommandkey
+
+# Save NTP statistics
+# driftfile /var/lib/chrony/drift
+# makestep 1.0 3

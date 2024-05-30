@@ -8,11 +8,14 @@
         name:
           - bind
           - bind-utils
+          - chrony
         state: present
 
     - name: Ensure named service is enabled and started
       service:
-        name: named
+        name: 
+          - named
+          - chronyd
         state: started
         enabled: yes
 
@@ -41,15 +44,37 @@
         mode: 0640
       notify: restart named service
 
+    - name: copy chrony.conf to chrony.conf.ori
+      copy:
+        src: /etc/chrony.conf
+        dest: /etc/chrony.conf.ori
+        remote_src: true
+  
+    - name: remove chrony.conf
+      file:
+        path: /etc/chrony.conf
+        state: absent
+
+    - name: Copy chrony.conf template
+      template:
+        src: templates/chrony.conf.j2
+        dest: /etc/chrony.conf
+        owner: root
+        group: root
+        mode: 0640
+        
     - name: add name server ip /etc/resolv.conf
       lineinfile:
         path: /etc/resolv.conf
         regexp: '^nameserver'
         line: "nameserver 192.168.124.200"
 
-    - name: Allow DNS service in firewalld
+    - name: Allow DNS,NTP service in firewalld
       firewalld:
-        service: dns
+        service: 
+          - dns
+          - ptp
+          - ntp
         zone: public
         permanent: true
         state: enabled
@@ -60,9 +85,11 @@
         state: reloaded
        
   handlers:
-    - name: restart named service
+    - name: restart named and ntp service
       service:
-        name: named
+        name: 
+          - named
+          - chronyd
         state: restared
         
 

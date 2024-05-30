@@ -90,12 +90,15 @@
         name: firewalld
         state: reloaded
        
+    - name: restart chronyd service
+      service:
+        name: chronyd
+        state: restared
+
   handlers:
     - name: restart named service
       service:
-        name: 
-          - named
-          - chronyd
+        name: named
         state: restared
         
 

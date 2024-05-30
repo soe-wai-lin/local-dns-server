@@ -7,4 +7,3 @@ packages:
 ports:
   - dns
   - ntp
-  - ptp

@@ -73,12 +73,23 @@
         regexp: '^nameserver'
         line: "nameserver 192.168.124.200"
 
-    - name: Allow DNS,NTP service in firewalld
+    - name: Allow DNS service in firewalld
       firewalld:
-        service: 
-          - dns
-          - ptp
-          - ntp
+        service: dns
+        zone: public
+        permanent: true
+        state: enabled
+        
+    - name: Allow NTP service in firewalld
+      firewalld:
+        service: ntp
+        zone: public
+        permanent: true
+        state: enabled
+
+    - name: Allow PTP service in firewalld
+      firewalld:
+        service: ptp
         zone: public
         permanent: true
         state: enabled

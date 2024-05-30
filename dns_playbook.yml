@@ -99,6 +99,6 @@
     - name: restart named service
       service:
         name: named
-        state: restared
+        state: restarted
         
 

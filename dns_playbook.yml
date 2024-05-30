@@ -91,7 +91,7 @@
         state: reloaded
        
   handlers:
-    - name: restart named and ntp service
+    - name: restart named service
       service:
         name: 
           - named

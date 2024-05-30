@@ -55,7 +55,7 @@
         state: enabled
 
     - name: Reload firewalld to apply changes
-     firewalld:
+      firewalld:
        state: reloaded
 
 

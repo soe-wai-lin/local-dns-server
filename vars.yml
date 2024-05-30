@@ -1,0 +1,10 @@
+---
+packages:
+  - bind
+  - bind-utils
+  - chrony
+
+ports:
+  - dns
+  - ntp
+  - ptp

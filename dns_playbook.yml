@@ -2,13 +2,11 @@
 - name: Install and configure BIND DNS server
   hosts: all
   become: yes
+  vars_files: vars.yml
   tasks:
     - name: Install bind and bind-utils package
       yum:
-        name:
-          - bind
-          - bind-utils
-          - chrony
+        name: "{{ packages }}"
         state: present
 
     - name: Ensure named service is enabled and started
@@ -19,7 +17,7 @@
 
     - name: Ensure NTP service is enabled and started
       systemd:
-        name: named
+        name: chronyd
         state: started
         enabled: yes
 
@@ -75,25 +73,25 @@
 
     - name: Allow DNS service in firewalld
       firewalld:
-        service: dns
+        service: "{{ ports }}"
         zone: public
         permanent: true
         state: enabled
         
-    - name: Allow NTP service in firewalld
-      firewalld:
-        service: ntp
-        zone: public
-        permanent: true
-        state: enabled
-
-    - name: Allow PTP service in firewalld
-      firewalld:
-        service: ptp
-        zone: public
-        permanent: true
-        state: enabled
-
+        #    - name: Allow NTP service in firewalld
+        #      firewalld:
+        #        service: ntp
+        #        zone: public
+        #        permanent: true
+        #        state: enabled
+        #
+        #    - name: Allow PTP service in firewalld
+        #      firewalld:
+        #        service: ptp
+        #        zone: public
+        #        permanent: true
+        #        state: enabled
+        #
     - name: Reload firewalld to apply changes
       service:
         name: firewalld

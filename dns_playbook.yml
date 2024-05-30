@@ -12,7 +12,7 @@
         state: present
 
     - name: Ensure named service is enabled and started
-      service:
+      systemd:
         name: 
           - named
           - chronyd

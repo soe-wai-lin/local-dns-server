@@ -12,10 +12,14 @@
         state: present
 
     - name: Ensure named service is enabled and started
+      service:
+        name: named
+        state: started
+        enabled: yes
+
+    - name: Ensure NTP service is enabled and started
       systemd:
-        name: 
-          - named
-          - chronyd
+        name: named
         state: started
         enabled: yes
 

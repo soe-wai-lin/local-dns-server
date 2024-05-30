@@ -73,25 +73,18 @@
 
     - name: Allow DNS service in firewalld
       firewalld:
-        service: "{{ ports }}"
+        service: dns
         zone: public
         permanent: true
         state: enabled
         
-        #    - name: Allow NTP service in firewalld
-        #      firewalld:
-        #        service: ntp
-        #        zone: public
-        #        permanent: true
-        #        state: enabled
-        #
-        #    - name: Allow PTP service in firewalld
-        #      firewalld:
-        #        service: ptp
-        #        zone: public
-        #        permanent: true
-        #        state: enabled
-        #
+    - name: Allow NTP service in firewalld
+      firewalld:
+        service: ntp
+        zone: public
+        permanent: true
+        state: enabled
+
     - name: Reload firewalld to apply changes
       service:
         name: firewalld

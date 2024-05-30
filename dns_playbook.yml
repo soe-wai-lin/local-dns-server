@@ -47,6 +47,19 @@
         path: /etc/resolv.conf
         line: "nameserver 192.168.124.200"
 
+    - name: Allow DNS service in firewalld
+      firewalld:
+        service: dns
+        zone: public
+        permanent: yes
+        state: enabled
+
+    - name: Reload firewalld to apply changes
+     firewalld:
+       state: reloaded
+
+
+
   handlers:
     name: restart named service
     service:

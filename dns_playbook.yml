@@ -93,7 +93,7 @@
     - name: restart chronyd service
       service:
         name: chronyd
-        state: restared
+        state: restarted
 
   handlers:
     - name: restart named service

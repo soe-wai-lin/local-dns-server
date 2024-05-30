@@ -1,0 +1,15 @@
+$TTL 86400
+@ IN SOA dns-primary.linuxlab.lan. admin.linuxlab.lan. (
+    2019061800 ;Serial
+    3600 ;Refresh
+    1800 ;Retry
+    604800 ;Expire
+    86400 ;Minimum TTL
+)
+
+;Name Server Information
+@ IN NS dns-primary.linuxlab.lan.
+
+;IP for Name Server
+dns-primary IN A 192.168.124.200
+

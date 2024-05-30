@@ -1,0 +1,56 @@
+---
+- name: Install and configure BIND DNS server
+  hosts: localhost
+  connection: local-connection
+  become: yes
+  tasks:
+    - name: Install bind and bind-utils package
+      yum:
+        name:
+          - bind
+          - bind-utils
+        state: present
+
+    - name: Ensure named service is enabled and started
+      service:
+        name: named
+        state: started
+        enabled: yes
+
+    - name: Copy named.conf template
+      template:
+        src: templates/named.conf.j2
+        dest: /etc/named.conf
+        owner: root
+        group: named
+        mode: 0640
+
+    - name: Copy linuxlab.lan.db.j2 template
+      template:
+        src: templates/linuxlab.lan.db.j2
+        dest: /var/named/linuxlab.lan.db
+        owner: root
+        group: named
+        mode: 0640
+
+    - name: Copy linuxlab.lan.rev.j2 template
+      template:
+        src: templates/linuxlab.lan.rev.j2
+        dest: /var/named/linuxlab.lan.rev
+        owner: root
+        group: named
+        mode: 0640
+      notify: restart named service
+
+    - name: add name server ip /etc/resolv.conf
+      lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 192.168.124.200"
+
+  handlers:
+    name: restart named service
+    service:
+      name: named
+      state: restared
+        
+

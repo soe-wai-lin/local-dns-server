@@ -1,0 +1,19 @@
+# /etc/ntp.conf, configuration for ntpd
+
+driftfile /var/lib/ntp/ntp.drift
+
+# Disable the panic feature to prevent the daemon from exiting if the time is too far off.
+tinker panic 0
+
+# NTP servers
+{% for server in ntp_servers %}
+server {{ ntp_servers }} iburst
+{% endfor %}
+
+# Default restrictions
+restrict -4 default kod notrap nomodify nopeer noquery
+restrict -6 default kod notrap nomodify nopeer noquery
+
+# Local clock
+restrict 127.0.0.1
+restrict ::1

@@ -2,10 +2,6 @@
 - name: Configure DNS client
   hosts: dns_client
   become: yes
-  vars:
-    ntp_servers:
-      - 192.168.124.200
-    
   tasks:
     - name: Backup the current resolv.conf
       copy:

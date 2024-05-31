@@ -29,28 +29,28 @@
 
     - name: Ensure NTP package is installed (for RHEL/CentOS)
       yum:
-        name: ntp
+        name: chrony
         state: present
       when: ansible_facts['os_family'] == 'RedHat'
 
-    - name: Configure /etc/ntp.conf
+    - name: Configure /etc/chrony.conf
       template:
-        src: ntp.conf.j2
-        dest: /etc/ntp.conf
+        src: chrony_client.conf.j2
+        dest: /etc/chrony.conf
         owner: root
         group: root
         mode: '0644'
 
     - name: Ensure NTP service is enabled and started (for Debian/Ubuntu)
       service:
-        name: ntp
+        name: chronyd
         state: started
         enabled: yes
       when: ansible_facts['os_family'] == 'Debian'
 
     - name: Ensure NTP service is enabled and started (for RHEL/CentOS)
       service:
-        name: ntpd
+        name: chronyd
         state: started
         enabled: yes
       when: ansible_facts['os_family'] == 'RedHat'

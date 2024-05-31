@@ -1,0 +1,25 @@
+---
+- name: Configure DNS client
+  hosts: dns_client
+  become: yes
+  vars:
+    dns_servers:
+      - 8.8.8.8
+      - 192.168.124.200
+
+  tasks:
+    - name: Backup the current resolv.conf
+      copy:
+        src: /etc/resolv.conf
+        dest: /etc/resolv.conf.backup
+        backup: yes
+
+    - name: Configure /etc/resolv.conf
+      template:
+        src: resolv.conf.j2
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+

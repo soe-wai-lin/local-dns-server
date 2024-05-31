@@ -2,11 +2,8 @@
 - name: Configure DNS client
   hosts: dns_client
   become: yes
-  vars:
-    dns_servers:
-      - 8.8.8.8
-      - 192.168.124.200
-
+  vars_files: vars.yml
+    
   tasks:
     - name: Backup the current resolv.conf
       copy:

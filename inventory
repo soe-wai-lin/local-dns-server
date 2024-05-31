@@ -1,3 +1,5 @@
 [local]
 localhost ansible_connection=local
 
+[dns_client]
+192.168.124.28

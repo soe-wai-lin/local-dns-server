@@ -7,9 +7,3 @@ packages:
 ports:
   - dns
   - ntp
-
-dns_servers:
-  - 192.168.124.200
-
-ntp_servers:
-  - 192.168.124.200

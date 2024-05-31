@@ -2,7 +2,6 @@
 - name: Configure DNS client
   hosts: dns_client
   become: yes
-  vars_files: vars.yml
     
   tasks:
     - name: Backup the current resolv.conf

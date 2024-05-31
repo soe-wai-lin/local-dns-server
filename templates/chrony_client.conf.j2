@@ -1,19 +1,14 @@
-# /etc/chrony.conf, configuration for ntpd
+server 192.168.124.200 iburst
 
-driftfile /var/lib/ntp/ntp.drift
+driftfile /var/lib/chrony/drift
 
-# Disable the panic feature to prevent the daemon from exiting if the time is too far off.
-tinker panic 0
+makestep 1.0 3
 
-# NTP servers
-{% for server in ntp_servers %}
-server {{ ntp_servers }} iburst
-{% endfor %}
+rtcsync
 
-# Default restrictions
-restrict -4 default kod notrap nomodify nopeer noquery
-restrict -6 default kod notrap nomodify nopeer noquery
+keyfile /etc/chrony.keys
 
-# Local clock
-restrict 127.0.0.1
-restrict ::1
+leapsectz right/UTC
+
+logdir /var/log/chrony
+

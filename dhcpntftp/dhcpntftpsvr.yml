@@ -15,9 +15,21 @@
         dest: /etc/dhcp/dhcpd.conf
         mode: 0644
 
-    - name: Enable and start DHCP,HTTP and TFTP service
+    - name: Enable and start DHCP service
       service:
-        name: "{{ services }}" 
+        name: dhcpd 
+        enabled: yes
+        state: started
+
+    - name: Enable and start httpd service
+      service:
+        name: httpd
+        enabled: yes
+        state: started
+
+    - name: Enable and start tftp service
+      service:
+        name: tftp
         enabled: yes
         state: started
 

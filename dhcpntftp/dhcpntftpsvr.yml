@@ -100,7 +100,7 @@
 
     - name: Copy /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/{vmlinuz,initrd.img}
       copy:
-        src: /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/{vmlinuz,initrd.img}
+        src: /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/vmlinuz
         dest: /var/lib/tftpboot/pxelinux.cfg/images
         owner: root
         group: root

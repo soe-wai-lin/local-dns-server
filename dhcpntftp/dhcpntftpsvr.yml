@@ -39,7 +39,7 @@
         path: /mnt/
         fstype: iso9660
         opts: loop,ro
-        state: present
+        state: mounted
 
     - name: Create /rhel-9.2 directory to copy tftpboot 
       file:
@@ -70,7 +70,7 @@
         path: /mnt/rhel-9.2
         fstype: iso9660
         opts: loop,ro
-        state: present
+        state: mounted
 
     - name: Copy /mnt/rhel-9.2 to /var/www/html/
       copy:

@@ -92,8 +92,8 @@
 
     - name: Extract rpm package
       command:
-        cmd: rpm2cpio /rhel-9.2/syslinux-tftpboot-version-architecture.rpm | cpio -dimv
-        creates: /rhel-9.2
+        cmd: cd /rhel-9.2 && rpm2cpio syslinux-tftpboot-version-architecture.rpm | cpio -dimv
+        creates: /rhel-9.2/
     
     - name: Copy /rhel-9.2/tftpboot/{images,pxelinux.cfg,pxelinux.vesamenu.c32}
       copy:

@@ -49,7 +49,10 @@
     - name: Copy tftpboot file to /rhel-9.2
       copy:
         src: /mnt/AppStream/Packages/syslinux-tftpboot-version-architecture.rpm
-        dest: /rhel-9.2
+        dest: /rhel-9.2/
+        owner: root
+        group: root
+        mode: "0644"
 
     - name: Unmount /mnt
       ansible.posix.mount:

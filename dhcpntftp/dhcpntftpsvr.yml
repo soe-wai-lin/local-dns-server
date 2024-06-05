@@ -133,14 +133,29 @@
       command:
         cmd: setsebool -P tftp_home_dir 1
     
-    - name: Open firewall for DHCP and TFTP
+    - name: Open firewall for HTTP
       firewalld:
-        service: "{{ firewallsvc }}"
+        service: http
         permanent: yes
         state: enabled
         zone: public
       notify: reload firewalld
 
+    - name: Open firewall for dhcp
+      firewalld:
+        service: dhcp
+        permanent: yes
+        state: enabled
+        zone: public
+      notify: reload firewalld
+
+    - name: Open firewall for tftp
+      firewalld:
+        service: tftp
+        permanent: yes
+        state: enabled
+        zone: public
+      notify: reload firewalld
   handlers:
     - name: reload firewalld
       command: firewall-cmd --reload

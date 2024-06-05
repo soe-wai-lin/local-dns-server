@@ -1,6 +1,6 @@
 ---
 - name: Install and configure BIND DNS server
-  hosts: all
+  hosts: local
   become: yes
   vars_files: vars.yml
   tasks:

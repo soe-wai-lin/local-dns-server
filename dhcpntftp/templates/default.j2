@@ -1,0 +1,11 @@
+UI vesamenu.c32
+
+default pxelinux.0
+prompt 2
+timeout 600
+MENU TITLE CBM-NET SERVER DEPLOYMENT PXE MENU
+
+LABEL rhel-9.2
+KERNEL images/RHEL-9.2/vmlinuz
+APPEND initrd=images/RHEL-9.2/initrd.img inst.ks=http://192.168.124.164/ks/rhel-9.2-ks.cfg ip=dhcp
+

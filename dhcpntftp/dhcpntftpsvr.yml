@@ -1,0 +1,118 @@
+---
+- name: Install and configure DHCP server
+  hosts: local
+  become: yes
+  tasks:
+    - name: Install DHCP,HTTP and TFTP packages
+      yum:
+        name: 
+          - dhcp-server
+          - tftp-server
+          - httpd
+        state: present
+
+    - name: Copy DHCP configuration file
+      template:
+        src: dhcpd.conf.j2
+        dest: /etc/dhcp/dhcpd.conf
+        mode: 0644
+
+    - name: Enable and start DHCP,HTTP and TFTP service
+      systemd:
+        name: 
+          - dhcpd
+          - tftp
+          - httpd
+        enabled: yes
+        state: started
+
+    - name: Mount rhel9.2 iso to /mnt
+      ansible.posix.mount:
+        src: /dev/sr0
+        path: /mnt
+        fstype: iso9660
+        opts: loop,ro
+        state: present
+
+    - name: Create /rhel-9.2 directory to copy tftpboot 
+      file:
+        path: /rhel-9.2
+        state: directory
+
+    - name: Copy tftpboot file to /rhel-9.2
+      copy:
+        src: /mnt/AppStream/Packages/syslinux-tftpboot-version-architecture.rpm
+        dest: /rhel-9.2
+
+    - name: Unmount /mnt
+      ansible.posix.mount:
+        path: /mnt
+        state: unmounted
+
+    - name: Create /mnt/rhel-9.2 directory 
+      file:
+        path: /mnt/rhel-9.2
+        state: directory
+
+    - name: Mount rhel9.2 iso to /mnt/rhel-9.2
+      ansible.posix.mount:
+        src: /dev/sr0
+        path: /mnt/rhel-9.2
+        fstype: iso9660
+        opts: loop,ro
+        state: present
+
+    - name: Copy /mnt/rhel-9.2 to /var/www/html/
+      copy:
+        src: /mnt/rhel-9.2
+        dest: /var/www/html/
+    
+    - name: Unmount /mnt
+      ansible.posix.mount:
+        path: /mnt/rhel-9.2
+        state: unmounted
+
+    - name: Create rhel-9.2 Local Repo
+      template:
+        src: rhel_http_repo.repo.j2
+        dest: /etc/yum.repos.d/rhel_http_repo.repo 
+
+    - name: Extract rpm package
+      command:
+        cmd: rpm2cpio /rhel-9.2/syslinux-tftpboot-version-architecture.rpm | cpio -dimv
+        creates: /rhel-9.2
+    
+    - name: Copy /rhel-9.2/tftpboot/{images,pxelinux.cfg,pxelinux.vesamenu.c32}
+      copy:
+        src: /rhel-9.2/tftpboot/{images,pxelinux.cfg,pxelinux.vesamenu.c32}
+        dest: /var/lib/tftpboot/
+
+    - name: Copy default.j2 to /var/lib/tftpboot/pxelinux.cfg/
+      template:
+        src: default.j2
+        dest: /var/lib/tftpboot/pxelinux.cfg/default
+
+    - name: Create /var/www/html/ks for kickstart
+      file:
+        path: /var/www/html/ks
+        state: directory
+
+    - name: Copy rhel-9.2-ks.cfg.j2 
+      template:
+        src: rhel-9.2-ks.cfg.j2
+        dest: /var/www/html/ks/rhel-9.2-ks.cfg 
+    
+    - name: Open firewall for DHCP and TFTP
+      firewalld:
+        service:
+          - dhcp
+          - tftp
+          - http
+        permanent: yes
+        state: enabled
+      notify: reload firewalld
+
+  handlers:
+    - name: reload firewalld
+      command: firewall-cmd --reload
+

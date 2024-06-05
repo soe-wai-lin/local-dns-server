@@ -16,7 +16,7 @@
         mode: 0644
 
     - name: Enable and start DHCP,HTTP and TFTP service
-      systemd:
+      service:
         name: "{{ services }}" 
         enabled: yes
         state: started

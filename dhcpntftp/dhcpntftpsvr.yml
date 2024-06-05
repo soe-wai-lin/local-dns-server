@@ -138,6 +138,7 @@
         service: "{{ firewallsvc }}"
         permanent: yes
         state: enabled
+        zone: public
       notify: reload firewalld
 
   handlers:

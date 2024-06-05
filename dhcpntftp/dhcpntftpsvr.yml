@@ -36,7 +36,7 @@
     - name: Mount rhel9.2 iso to /mnt
       ansible.posix.mount:
         src: /dev/sr0
-        path: /mnt
+        path: /mnt/
         fstype: iso9660
         opts: loop,ro
         state: present

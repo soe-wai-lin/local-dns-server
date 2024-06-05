@@ -102,6 +102,7 @@
       copy:
         src: /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/pxelinux.cfg/images
         dest: /var/lib/tftpboot/
+        remote_src: yes
 
     - name: Copy default.j2 to /var/lib/tftpboot/pxelinux.cfg/
       template:

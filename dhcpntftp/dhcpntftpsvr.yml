@@ -91,7 +91,7 @@
         dest: /etc/yum.repos.d/rhel_http_repo.repo 
 
     - name: Extract rpm package
-      command: sh -c "rpm2cpio /rhel-9.2/syslinux-tftpboot-6.04-0.20.el9.noarch.rpm -D /rhel-9.2/
+      command: sh -c "rpm2cpio /rhel-9.2/syslinux-tftpboot-6.04-0.20.el9.noarch.rpm -D /rhel-9.2/"
     
     - name: Copy /rhel-9.2/tftpboot/{images,pxelinux.cfg,pxelinux.vesamenu.c32}
       copy:

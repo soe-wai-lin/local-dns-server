@@ -1,0 +1,15 @@
+---
+packages:
+  - dhcpd-server
+  - tftp-server
+  - httpd
+
+services:
+  - dhcpd
+  - tftp
+  - httpd
+
+firewallsvc:
+  - dhcp
+  - tftp
+  - http

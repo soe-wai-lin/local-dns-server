@@ -2,13 +2,11 @@
 - name: Install and configure DHCP server
   hosts: local
   become: yes
+  vars_files: vars.yml
   tasks:
     - name: Install DHCP,HTTP and TFTP packages
       yum:
-        name: 
-          - dhcp-server
-          - tftp-server
-          - httpd
+        name: "{{ packages }}" 
         state: present
 
     - name: Copy DHCP configuration file
@@ -19,10 +17,7 @@
 
     - name: Enable and start DHCP,HTTP and TFTP service
       systemd:
-        name: 
-          - dhcpd
-          - tftp
-          - httpd
+        name: "{{ services }}" 
         enabled: yes
         state: started
 
@@ -108,10 +103,7 @@
     
     - name: Open firewall for DHCP and TFTP
       firewalld:
-        service:
-          - dhcp
-          - tftp
-          - http
+        service: "{{ firewalldsvc }}"
         permanent: yes
         state: enabled
       notify: reload firewalld

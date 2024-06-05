@@ -92,7 +92,7 @@
 
     - name: Extract rpm package
       unarchive:
-        src: /rhel-9.2/syslinux-tftpboot-version-architecture.rpm 
+        src: /rhel-9.2/syslinux-tftpboot-6.04-0.20.el9.noarch.rpm 
         dest: /rhel-9.2/
         remote_src: yes
     

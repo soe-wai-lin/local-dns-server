@@ -101,6 +101,10 @@
       template:
         src: rhel-9.2-ks.cfg.j2
         dest: /var/www/html/ks/rhel-9.2-ks.cfg 
+
+    - name: Enable for tftp_home_dir 
+      command:
+        cmd: setsebool -P tftp_home_dir 1
     
     - name: Open firewall for DHCP and TFTP
       firewalld:

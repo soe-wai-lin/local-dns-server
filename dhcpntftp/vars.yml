@@ -1,6 +1,6 @@
 ---
 packages:
-  - dhcpd-server
+  - dhcp-server
   - tftp-server
   - httpd
 

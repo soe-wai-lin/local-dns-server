@@ -109,7 +109,7 @@
 
     - name: Copy /rhel-9.2/tftpboot/* to /var/lib/tftpboot/
       copy:
-        src: /rhel-9.2/tftpboot/
+        src: /rhel-9.2/tftpboot/*
         dest: /var/lib/tftpboot/
 
     - name: Create /var/lib/tftpboot/pxelinux.cfg

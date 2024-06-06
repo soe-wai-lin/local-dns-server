@@ -92,6 +92,8 @@
       sefcontext:
         target: '/var/lib/tftpboot(/.*)?'
         setype: tftpdir_rw_t
+        seuser: system_u
+        serole: object_r
         state: present
       notify: restorecon
 
@@ -99,10 +101,6 @@
       file:
         path: /var/lib/tftpboot/images
         state: directory
-        setype: tftpdir_rw_t
-        seuser: system_u
-        serole: object_r
-      notify: restorecon
 
     - name: Copy /var/www/html/rhel-9.2/images/pxeboot/vmlinuz
       copy:
@@ -123,10 +121,6 @@
       file:
         path: /var/lib/tftpboot/pxelinux.cfg
         state: directory
-        setype: tftpdir_rw_t
-        seuser: system_u
-        serole: object_r
-      notify: restorecon
 
     - name: Copy default.j2 to /var/lib/tftpboot/pxelinux.cfg/
       template:
@@ -174,4 +168,4 @@
       command: firewall-cmd --reload
 
     - name: restorecon
-      command: /sbin/restorecon -R /var/lib/tftpboot
+      command: /sbin/restorecon -Rv /var/lib/tftpboot

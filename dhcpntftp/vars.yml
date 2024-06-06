@@ -9,7 +9,7 @@ services:
   - tftp
   - httpd
 
-firewallsvc:
+firewalldsvc:
   - dhcp
   - tftp
   - http

@@ -1,13 +1,14 @@
 ---
-- name: Install and configure DHCP server
+- name: Install and configure DHCP and TFTP server
   hosts: local
   become: yes
   vars_files: vars.yml
   tasks:
     - name: Install DHCP,HTTP and TFTP packages
       yum:
-        name: "{{ packages }}" 
+        name: "{{ item }}" 
         state: present
+      loop: "{{ packages }}"
 
     - name: Copy DHCP configuration file
       template:
@@ -17,21 +18,10 @@
 
     - name: Enable and start DHCP service
       service:
-        name: dhcpd 
+        name: "{{ item }}"
         enabled: yes
         state: started
-
-    - name: Enable and start httpd service
-      service:
-        name: httpd
-        enabled: yes
-        state: started
-
-    - name: Enable and start tftp service
-      service:
-        name: tftp
-        enabled: yes
-        state: started
+      loop: "{{ services }}"
 
     - name: Mount rhel9.2 iso to /mnt
       ansible.posix.mount:
@@ -71,10 +61,9 @@
         fstype: iso9660
         state: mounted
 
-        # - name: Copy /mnt/rhel-9.2 to /var/www/html/
-        #   command:
-        #     cmd: "cp -r /mnt/rhel-9.2 /var/www/html/"
-
+    - name: Copy /mnt/rhel-9.2 to /var/www/html/
+      command:
+        md: "cp -r /mnt/rhel-9.2 /var/www/html/"
     
     - name: Unmount /mnt
       ansible.posix.mount:
@@ -108,7 +97,7 @@
         src: /var/www/html/rhel-9.2/images/pxeboot/initrd.img
         dest: /var/lib/tftpboot/images
 
-    - name: Copy /rhel-9.2/tftpboot/* to /var/lib/tftpboot/
+    - name: Copy /rhel-9.2/tftpboot/ to /var/lib/tftpboot/
       copy:
         src: /rhel-9.2/tftpboot/
         dest: /var/lib/tftpboot/
@@ -133,30 +122,17 @@
         src: rhel-9.2-ks.cfg.j2
         dest: /var/www/html/ks/rhel-9.2-ks.cfg 
 
-    - name: Enable for tftp_home_dir 
+    - name: Enable sebool for tftp_home_dir 
       command:
         cmd: setsebool -P tftp_home_dir 1
     
-    - name: Open firewall for HTTP
+    - name: Open firewall for HTTP, DHCP, TFTP
       firewalld:
-        service: http
+        service: "{{ item }}"
         permanent: yes
         state: enabled
         zone: public
-
-    - name: Open firewall for dhcp
-      firewalld:
-        service: dhcp
-        permanent: yes
-        state: enabled
-        zone: public
-
-    - name: Open firewall for tftp
-      firewalld:
-        service: tftp
-        permanent: yes
-        state: enabled
-        zone: public
+      loop: "{{ firewalldsvc }}"
       notify: reload firewalld
       
   handlers:

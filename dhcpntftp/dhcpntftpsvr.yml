@@ -144,6 +144,13 @@
     - name: Enable for tftp_home_dir 
       command:
         cmd: setsebool -P tftp_home_dir 1
+
+    - name: Set SELinux file type for /var/lib/tftpboot(/.*)?
+      sefcontext:
+        target: '/var/lib/tftpboot(/.*)?'
+        setype: tftpdir_rw_t
+        state: present
+      notify: restorecon
     
     - name: Open firewall for HTTP
       firewalld:
@@ -166,13 +173,6 @@
         state: enabled
         zone: public
       notify: reload firewalld
-
-    - name: Set SELinux file type for a directory
-      ansible.posix.sefcontext:
-        target: '/var/lib/tftpboot(/.*)?'
-        setype: tftpdir_rw_t
-        state: present
-      notify: restorecon
       
   handlers:
     - name: reload firewalld

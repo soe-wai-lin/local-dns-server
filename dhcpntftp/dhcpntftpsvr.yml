@@ -166,6 +166,16 @@
         state: enabled
         zone: public
       notify: reload firewalld
+
+    - name: Set SELinux file type for a directory
+      ansible.posix.sefcontext:
+        target: '/var/lib/tftpboot(/.*)?'
+        setype: 'tftpdir_rw_t'
+      notify: restorecon
+      
   handlers:
     - name: reload firewalld
       command: firewall-cmd --reload
+
+    - name: restorecon
+      command: /sbin/restorecon -R /var/lib/tftpboot

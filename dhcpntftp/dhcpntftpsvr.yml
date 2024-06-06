@@ -77,9 +77,9 @@
       copy:
         src: /mnt/rhel-9.2
         dest: /var/www/html/
-        owner: root
-        group: root
-        mode: "0644"
+        #owner: root
+        #group: root
+        #mode: "0644"
     
     - name: Unmount /mnt
       ansible.posix.mount:

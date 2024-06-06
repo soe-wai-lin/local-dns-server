@@ -74,12 +74,9 @@
         state: mounted
 
     - name: Copy /mnt/rhel-9.2 to /var/www/html/
-      copy:
-        src: /mnt/rhel-9.2
-        dest: /var/www/html/
-        #owner: root
-        #group: root
-        #mode: "0644"
+      command:
+        cmd: "cp -r /mnt/rhel-9.2 /var/www/html/"
+
     
     - name: Unmount /mnt
       ansible.posix.mount:

@@ -36,7 +36,7 @@
     - name: Mount rhel9.2 iso to /mnt
       ansible.posix.mount:
         src: /dev/sr0
-        path: /mnt/
+        path: /mnt
         fstype: iso9660
         opts: loop,ro
         state: mounted
@@ -50,9 +50,10 @@
       copy:
         src: /mnt/AppStream/Packages/syslinux-tftpboot-6.04-0.20.el9.noarch.rpm
         dest: /rhel-9.2/
-        owner: root
-        group: root
         mode: "0644"
+
+    - name: Extract rpm package
+      command: sh -c "rpm2cpio /rhel-9.2/syslinux-tftpboot-6.04-0.20.el9.noarch.rpm | cpio -idmv -D /rhel-9.2/"
 
     - name: Unmount /mnt
       ansible.posix.mount:
@@ -72,13 +73,13 @@
         opts: loop,ro
         state: mounted
 
-        #    - name: Copy /mnt/rhel-9.2 to /var/www/html/
-        #      copy:
-        #        src: /mnt/rhel-9.2
-        #        dest: /var/www/html/
-        #        owner: root
-        #        group: root
-        #        mode: "0644"
+    - name: Copy /mnt/rhel-9.2 to /var/www/html/
+      copy:
+        src: /mnt/rhel-9.2
+        dest: /var/www/html/
+        owner: root
+        group: root
+        mode: "0644"
     
     - name: Unmount /mnt
       ansible.posix.mount:
@@ -90,29 +91,43 @@
         src: rhel_http_repo.repo.j2
         dest: /etc/yum.repos.d/rhel_http_repo.repo 
 
-    - name: Extract rpm package
-      command: sh -c "rpm2cpio /rhel-9.2/syslinux-tftpboot-6.04-0.20.el9.noarch.rpm | cpio -idmv -D /rhel-9.2/"
-    
-    - name: Create /var/lib/tftpboot/pxelinux.cfg/images
+    - name: Create /var/lib/tftpboot/images
       file:
-        path: /var/lib/tftpboot/pxelinux.cfg/images
+        path: /var/lib/tftpboot/images
         state: directory
 
-    - name: Copy /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/vmlinuz
+    - name: Copy /var/www/html/rhel-9.2/images/pxeboot/vmlinuz
       copy:
-        src: /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/vmlinuz
-        dest: /var/lib/tftpboot/pxelinux.cfg/images
+        src: /var/www/html/rhel-9.2/images/pxeboot/vmlinuz
+        dest: /var/lib/tftpboot/images
         owner: root
         group: root
         mode: "0644" 
 
-    - name: Copy /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/initrd.img
+    - name: Copy /var/www/html/rhel-9.2/images/pxeboot/initrd.img
       copy:
-        src: /var/www/html/rhel-9.2/rhel-9.2/images/pxeboot/initrd.img
-        dest: /var/lib/tftpboot/pxelinux.cfg/images
+        src: /var/www/html/rhel-9.2/images/pxeboot/initrd.img
+        dest: /var/lib/tftpboot/images
         owner: root
         group: root
         mode: "0644"  
+
+    - name: Copy /rhel-9.2/tftpboot/* to /var/lib/tftpboot/
+      copy:
+        src: /rhel-9.2/tftpboot/
+        dest: /var/lib/tftpboot/
+        owner: root
+        group: root
+        mode: "0644"
+
+
+    - name: Create /var/lib/tftpboot/pxelinux.cfg
+      file:
+        path: /var/lib/tftpboot/pxelinux.cfg
+        state: directory
+        owner: root
+        group: root
+        mode: "0644"
 
     - name: Copy default.j2 to /var/lib/tftpboot/pxelinux.cfg/
       template:
@@ -139,7 +154,6 @@
         permanent: yes
         state: enabled
         zone: public
-      notify: reload firewalld
 
     - name: Open firewall for dhcp
       firewalld:
@@ -147,7 +161,6 @@
         permanent: yes
         state: enabled
         zone: public
-      notify: reload firewalld
 
     - name: Open firewall for tftp
       firewalld:

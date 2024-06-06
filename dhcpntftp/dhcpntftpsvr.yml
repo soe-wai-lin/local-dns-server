@@ -86,6 +86,13 @@
     - name: Create rhel-9.2 Local Repo
       template:
         src: rhel_http_repo.repo.j2
+
+    - name: Set SELinux file type for /var/lib/tftpboot(/.*)?
+      sefcontext:
+        target: '/var/lib/tftpboot(/.*)?'
+        setype: tftpdir_rw_t
+        state: present
+      notify: restorecon
         dest: /etc/yum.repos.d/rhel_http_repo.repo 
 
     - name: Create /var/lib/tftpboot/images
@@ -139,13 +146,6 @@
     - name: Enable for tftp_home_dir 
       command:
         cmd: setsebool -P tftp_home_dir 1
-
-    - name: Set SELinux file type for /var/lib/tftpboot(/.*)?
-      sefcontext:
-        target: '/var/lib/tftpboot(/.*)?'
-        setype: tftpdir_rw_t
-        state: present
-      notify: restorecon
     
     - name: Open firewall for HTTP
       firewalld:

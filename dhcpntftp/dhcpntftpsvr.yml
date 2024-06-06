@@ -92,6 +92,8 @@
       file:
         path: /var/lib/tftpboot/images
         state: directory
+        setype: tftpdir_rw_t
+      notify: restorecon
 
     - name: Copy /var/www/html/rhel-9.2/images/pxeboot/vmlinuz
       copy:

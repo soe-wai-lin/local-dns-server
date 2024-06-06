@@ -63,7 +63,7 @@
 
     - name: Copy /mnt/rhel-9.2 to /var/www/html/
       command:
-        md: "cp -r /mnt/rhel-9.2 /var/www/html/"
+        cmd: "cp -r /mnt/rhel-9.2 /var/www/html/"
     
     - name: Unmount /mnt
       ansible.posix.mount:

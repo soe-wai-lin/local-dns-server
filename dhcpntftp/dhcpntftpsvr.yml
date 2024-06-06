@@ -168,9 +168,10 @@
       notify: reload firewalld
 
     - name: Set SELinux file type for a directory
-      ansible.posix.sefcontext:
+      sefcontext:
         target: '/var/lib/tftpboot(/.*)?'
-        setype: 'tftpdir_rw_t'
+        setype: tftpdir_rw_t
+        state: present
       notify: restorecon
       
   handlers:

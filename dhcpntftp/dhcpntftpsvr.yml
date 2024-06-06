@@ -90,8 +90,6 @@
       sefcontext:
         target: '/var/lib/tftpboot(/.*)?'
         setype: tftpdir_rw_t
-        seuser: system_u
-        serole: object_r
         state: present
       notify: restorecon
 

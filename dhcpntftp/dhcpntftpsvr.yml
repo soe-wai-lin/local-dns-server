@@ -73,9 +73,9 @@
         opts: loop,ro
         state: mounted
 
-    - name: Copy /mnt/rhel-9.2 to /var/www/html/
-      command:
-        cmd: "cp -r /mnt/rhel-9.2 /var/www/html/"
+        # - name: Copy /mnt/rhel-9.2 to /var/www/html/
+        #   command:
+        #     cmd: "cp -r /mnt/rhel-9.2 /var/www/html/"
 
     
     - name: Unmount /mnt
@@ -168,7 +168,7 @@
       notify: reload firewalld
 
     - name: Set SELinux file type for a directory
-      sefcontext:
+      community.general.sefcontext:
         target: '/var/lib/tftpboot(/.*)?'
         setype: tftpdir_rw_t
         state: present
